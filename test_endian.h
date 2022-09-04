@@ -7,19 +7,19 @@
 namespace jot::tests 
 {
     //lower_bytes_offset should return an offset into the byte field pointing to the bytes representing the lowest values
-    test test_lower_bytes_offset()
+    proc test_lower_bytes_offset()
     {
 
     }
 
     //higher_bytes_offset should return an offset into the byte field pointing to the bytes representing the biggest values
-    test test_higher_bytes_offset()
+    proc test_higher_bytes_offset()
     {
 
     }
 
     //get_relative_endian_placement should call the matching lambda with the appropriate lower_bytes_offset
-    test test_place_endian()
+    proc test_place_endian()
     {
 
     }
@@ -31,7 +31,7 @@ namespace jot::tests
     }
 
     //from_endian should convert given bytes withe the source and target endian and save the resulting number to integer
-    test test_from_endian()
+    proc test_from_endian()
     {
         //Single byte should be converted to its value regardless of endians used
         {
@@ -119,12 +119,12 @@ namespace jot::tests
         //REQUIRE(true == true);
     }
     //to_endian should convert given integer withe the source and target endian and save resulting bytes to bytes
-    test test_to_endian()
+    proc test_to_endian()
     {
     
     }
     
-    test test_endian()
+    proc test_endian()
     {
         test_from_endian();
         test_to_endian();

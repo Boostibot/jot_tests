@@ -11,7 +11,7 @@ namespace jot::tests
         (std::is_signed_v<Integer>   && std::is_signed_v<From> && (sizeof(Integer) >= sizeof(From))) ||
         (std::is_signed_v<Integer>   && std::is_unsigned_v<From> && (sizeof(Integer) > sizeof(From)));
 
-    test test_concepts()
+    proc test_concepts()
     {
         //convertible_integer shoudl return true only if the types are convertible without explicit cast
         // as if in the form of Left = Right; (with convertible_integer<Left, Right>)

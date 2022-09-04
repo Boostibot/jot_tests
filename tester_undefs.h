@@ -1,4 +1,4 @@
-#undef test
+#undef proc
 
 #undef CONCAT
 #undef IN__CONCAT_

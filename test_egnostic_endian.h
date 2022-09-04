@@ -9,7 +9,7 @@
 namespace jot::tests
 {
     //from_shifted_bytes should shift all bytes by the given offsets and binary or them into a value
-    test test_from_shifted_bytes()
+    proc test_from_shifted_bytes()
     {
         constexpr Array<byte, 8> little_shifts = {0, 8, 16, 24, 32, 40, 48, 56};
         constexpr Array<byte, 8> big_shifts    = {56, 48, 40, 32, 24, 16, 8, 0};
@@ -65,7 +65,7 @@ namespace jot::tests
     }
 
     //to_shifted_bytes should set value of each of given byte to the given value shifted by the according shift
-    test test_to_shifted_bytes()
+    proc test_to_shifted_bytes()
     {
         constexpr Array<u8, 8> little_shifts = {0, 8, 16, 24, 32, 40, 48, 56};
         constexpr Array<u8, 8> big_shifts    = {56, 48, 40, 32, 24, 16, 8, 0};
@@ -114,7 +114,7 @@ namespace jot::tests
     }
 
     //from_endian should convert bytes in given endian to value
-    test test_egnostic_from_endian()
+    proc test_egnostic_from_endian()
     {
 
         constexpr let bytes_8 = to_array<u8>({1, 2, 3, 4, 5, 6, 7, 8});
@@ -179,7 +179,7 @@ namespace jot::tests
     }
 
     //to_endian should convert value to bytes in given endian
-    test test_egnostic_to_endian()
+    proc test_egnostic_to_endian()
     {
         //size 1
         {
@@ -252,7 +252,7 @@ namespace jot::tests
         }
     }
 
-    test test_egnostic_endian()
+    proc test_egnostic_endian()
     {
         test_from_shifted_bytes();
         test_to_shifted_bytes();

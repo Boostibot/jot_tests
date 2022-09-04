@@ -8,7 +8,7 @@
 namespace jot::tests
 {
 
-    test test_construction()
+    proc test_construction()
     {
         Array<u8, 0> empty;
         constexpr Array<u8, 0> empty_constexpr2 = {0};
@@ -67,7 +67,7 @@ namespace jot::tests
         hybrid_assert(deduced4[2] == false);
     }
 
-    test test_destructuring()
+    proc test_destructuring()
     {
         {
             constexpr Array arr = {1, 2, 3};
@@ -89,7 +89,7 @@ namespace jot::tests
         }
     }
 
-    test test_comparison()
+    proc test_comparison()
     {
         constexpr Array int1 = {1, 2, 3, 4, 5};
         constexpr Array int2 = {1, 2, 3, 4, 5};
@@ -144,7 +144,7 @@ namespace jot::tests
         hybrid_assert(struct1 != struct3);
     }
 
-    test test_assignment()
+    proc test_assignment()
     {
         Array deduced1 = {1, 2, 3, 4, 5};
         Array deduced2 = {1.1, 2.1, 3.1, 4, 5.8};
@@ -174,7 +174,7 @@ namespace jot::tests
         runtime_assert(assigned1 == Array{1, 3, 4, 5, 6});
     }
 
-    test test_acessors()
+    proc test_acessors()
     {
         constexpr Array deduced1 = {1, 2, 3, 4, 5};
         constexpr Array deduced3 = {1U, 2, 3, 4, 5};
@@ -199,7 +199,7 @@ namespace jot::tests
         hybrid_assert(std::size(deduced5) == deduced5.size);
     }
 
-    test test_array()
+    proc test_array()
     {
         test_construction();
         test_comparison();

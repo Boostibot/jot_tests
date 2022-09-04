@@ -7,7 +7,29 @@
 #include "jot/defer.h"
 #include "jot/stack.h"
 #include "jot/stack_settings.h"
+#include "jot/bitfield.h"
 #include "jot/defines.h"
+
+struct Almost_POD
+{
+    jot::i32 val;
+
+    constexpr Almost_POD(jot::i32 val) : val(val) {};
+    constexpr Almost_POD(const Almost_POD&) = default;
+    constexpr Almost_POD(Almost_POD&&) = default;
+    constexpr Almost_POD& operator =(const Almost_POD&) const = delete;
+    constexpr bool operator==(const Almost_POD&) const = default;
+
+    constexpr operator jot::i32() const { return val; };
+};
+
+namespace std 
+{
+    constexpr void swap(Almost_POD& l, Almost_POD& r)
+    {
+        std::swap(l.val, r.val);
+    }
+}
 
 namespace jot::stack_test
 {
@@ -54,6 +76,8 @@ namespace jot::stack_test
 
         constexpr ~Test_Res() { stats->destructed++; }
 
+        constexpr bool operator ==(const Test_Res& other) const 
+            { return this->val == other.val; };
         constexpr operator T() const {return val;};
     };
 
@@ -80,7 +104,7 @@ namespace jot::stack_test
     };
 
     template<typename T>
-    test test_push_pop(Array<T, 3> vals)
+    proc test_push_pop(Array<T, 3> vals)
     {
         using Grow = Def_Grow<2, 0, 6>;
         using Alloc = Def_Alloc<T>;
@@ -125,7 +149,7 @@ namespace jot::stack_test
     }
 
     template<typename T>
-    test test_push_pop_constexpr(Array<T, 3> vals)
+    proc test_push_pop_constexpr(Array<T, 3> vals)
     {
         using Grow = Def_Grow<2, 0, 6>;
         using Alloc = Def_Alloc<T>;
@@ -173,7 +197,7 @@ namespace jot::stack_test
         }
     }
 
-    test test_push_pop()
+    proc test_push_pop()
     {
         Res_Watch<i32> w1;
         Res_Watch<f64> w2;
@@ -193,7 +217,7 @@ namespace jot::stack_test
     }
 
     template<size_t static_cap, typename T>
-    test test_copy(Array<T, 3> vals)
+    proc test_copy(Array<T, 3> vals)
     {
         using Grow = Def_Grow<2, 0, 6>;
         using Alloc = Def_Alloc<T>;
@@ -295,7 +319,7 @@ namespace jot::stack_test
     }
 
     template<size_t static_cap, typename T>
-    test test_swap(Array<T, 6> vals)
+    proc test_swap(Array<T, 6> vals)
     {
         using Grow = Def_Grow<2, 0, 6>;
         using Alloc = Def_Alloc<T>;
@@ -368,11 +392,14 @@ namespace jot::stack_test
         }
     }
 
-    test test_swap()
+
+
+    proc test_swap()
     {
         Res_Watch<i32> w1;
         Res_Watch<f64> w2;
 
+        //constexpr let arr3 = to_array<Almost_POD>({{1}, {2}, {3}, {6346}, {-422}, {12}});
         {
             let arr1 = w1.make_arr(10, 20, 30, 40, 50, 60);
             let arr2 = w2.make_arr(1.0, 2.0, 3.0, 4.0, 5.0, 6.0);
@@ -383,6 +410,9 @@ namespace jot::stack_test
             test_swap<0>(arr2);
             test_swap<3>(arr2);
             test_swap<4>(arr2);
+
+            //test_swap<3, Almost_POD>(arr3);
+            //test_swap<4, Almost_POD>(arr3);
         }
 
         runtime_assert(w1.ok());
@@ -390,14 +420,15 @@ namespace jot::stack_test
 
         constexpr auto test_constexpr = []{
             test_swap<0, i32>({10, 20, 30, 40, 50, 60});
-            test_swap<0, f64>({1.0, 2.0, 3.0, 4.0, 5.0, 6.0});
+            test_swap<0, f64>({ 1.0, 2.0, 3.0, 4.0, 5.0, 6.0 });
+            //test_swap<0, Almost_POD>(arr3);
 
             return true;
         }();
     }
 
     template<size_t static_cap, typename T>
-    test test_move(Array<T, 6> vals)
+    proc test_move(Array<T, 6> vals)
     {
         using Grow = Def_Grow<2, 0, 6>;
         using Alloc = Def_Alloc<T>;
@@ -500,11 +531,12 @@ namespace jot::stack_test
     }
 
 
-    test test_move()
+    proc test_move()
     {
         Res_Watch<i32> w1;
         Res_Watch<f64> w2;
 
+        //constexpr let arr3 = to_array<Almost_POD>({{1}, {2}, {3}, {6346}, {-422}, {12}});
         {
             let arr1 = w1.make_arr(10, 20, 30, 40, 50, 60);
             let arr2 = w2.make_arr(1.0, 2.0, 3.0, 4.0, 5.0, 6.0);
@@ -515,6 +547,9 @@ namespace jot::stack_test
             test_move<0>(arr2);
             test_move<3>(arr2);
             test_move<4>(arr2);
+
+            //test_move<3, Almost_POD>(arr3);
+            //test_move<7, Almost_POD>(arr3);
         }
 
         runtime_assert(w1.ok());
@@ -523,18 +558,24 @@ namespace jot::stack_test
         constexpr auto test_constexpr = [] {
             test_move<0, i32>({ 10, 20, 30, 40, 50, 60 });
             test_move<0, f64>({ 1.0, 2.0, 3.0, 4.0, 5.0, 6.0 });
+            //test_move<0, Almost_POD>(arr3);
 
             return true;
         }();
     }
 
-    test test_copy()
+
+    proc test_copy()
     {
         Res_Watch<i32> w1;
         Res_Watch<f64> w2;
 
+        constexpr let arr3 = to_array<Almost_POD>({{1}, {2}, {3}});
+
         test_copy<3>(w1.make_arr(10, 20, 30));
         test_copy<2>(w2.make_arr(1.0, 2.0, 3.0));
+        test_copy<10>(arr3);
+        test_copy<2>(arr3);
 
         test_copy<0>(w1.make_arr(10, 20, 30));
         test_copy<0>(w2.make_arr(1.0, 2.0, 3.0));
@@ -545,17 +586,192 @@ namespace jot::stack_test
         constexpr auto test_constexpr = []{
             test_copy<0, i32>({10, 20, 30});
             test_copy<0, f64>({1.0, 2.0, 3.0});
+            test_copy<0, Almost_POD>(arr3);
 
             return true;
         }();
     }
 
-    test test_stack()
+    template<size_t static_cap, typename T>
+    proc test_reserve(Array<T, 3> vals)
+    {
+        using Grow = Def_Grow<2, 0, 6>;
+        using Alloc = Def_Alloc<T>;
+        using Size = size_t;
+        using Stack = jot::Stack<T, static_cap, Size, Alloc, Grow>;
+
+        static_assert(static_cap <= 6, "static capacity is assumed to be below 7");
+
+        {
+            Stack empty;
+            reserve(&empty, 5);
+
+            runtime_assert(empty.capacity == max(6, empty.static_capacity));
+            runtime_assert(empty.size == 0);
+
+            reserve(&empty, 13);
+            runtime_assert(empty.capacity == 24);
+            runtime_assert(empty.size == 0);
+        }
+
+        {
+            Stack empty;
+            reserve(&empty, 7);
+
+            runtime_assert(empty.capacity == 12);
+            runtime_assert(empty.size == 0);
+
+
+            reserve(&empty, 2);
+            runtime_assert(empty.capacity == 12);
+            runtime_assert(empty.size == 0);
+        }
+
+        {
+            Stack stack;
+            push(&stack, vals[0]);
+            push(&stack, vals[0]);
+            push(&stack, vals[0]);
+            runtime_assert(empty.capacity == 6);
+            runtime_assert(empty.size == 3);
+
+            reserve(&stack, 7);
+            runtime_assert(empty.capacity == 12);
+            runtime_assert(empty.size == 3);
+
+            pop(&stack);
+
+            reserve(&stack, 2);
+            runtime_assert(empty.capacity == 12);
+            runtime_assert(empty.size == 2);
+        }
+    }
+
+    template<size_t static_cap, typename T>
+    proc test_resize(Array<T, 3> vals)
+    {
+        using Grow = Def_Grow<2, 0, 6>;
+        using Alloc = Def_Alloc<T>;
+        using Size = size_t;
+        using Stack = jot::Stack<T, static_cap, Size, Alloc, Grow>;
+
+        static_assert(static_cap <= 6, "static capacity is assumed to be below 7");
+        //resizing empty stack
+        {
+            Stack empty;
+            resize(&empty, 5, vals[0]);
+
+            runtime_assert(empty.capacity == max(6, empty.static_capacity));
+            runtime_assert(empty.size == 5);
+            runtime_assert(empty[0] == vals[0]);
+            runtime_assert(empty[1] == vals[0]);
+            runtime_assert(empty[2] == vals[0]);
+            runtime_assert(empty[3] == vals[0]);
+            runtime_assert(empty[4] == vals[0]);
+        }
+
+        {
+            Stack stack;
+            resize(&stack, 7, vals[0]);
+
+            runtime_assert(stack.capacity == 12);
+            runtime_assert(stack.size == 7);
+            runtime_assert(stack[0] == vals[0]);
+            runtime_assert(stack[2] == vals[0]);
+            runtime_assert(stack[4] == vals[0]);
+            runtime_assert(stack[6] == vals[0]);
+
+            //growing
+            resize(&stack, 11, vals[1]);
+            resize(&stack, 12, vals[2]);
+            runtime_assert(stack.capacity == 12);
+            runtime_assert(stack.size == 12);
+            runtime_assert(stack[7] == vals[1]);
+            runtime_assert(stack[9] == vals[1]);
+            runtime_assert(stack[10] == vals[1]);
+            runtime_assert(stack[11] == vals[2]);
+
+            //shrinking
+            resize(&stack, 11, vals[1]);
+            runtime_assert(stack.capacity == 12);
+            runtime_assert(stack.size == 11);
+            runtime_assert(stack[0] == vals[0]);
+            runtime_assert(stack[6] == vals[0]);
+            runtime_assert(stack[10] == vals[1]);
+
+            push(&stack, vals[2]);
+
+            resize(&stack, 7, vals[1]);
+            runtime_assert(stack.capacity == 12);
+            runtime_assert(stack.size == 7);
+            runtime_assert(stack[1] == vals[0]);
+            runtime_assert(stack[3] == vals[0]);
+            runtime_assert(stack[5] == vals[0]);
+            runtime_assert(stack[6] == vals[0]);
+        }
+    }
+
+
+    proc test_reserve_resize()
+    {
+        Res_Watch<i32> w1;
+        Res_Watch<f64> w2;
+
+        constexpr let arr3 = to_array<Almost_POD>({{1}, {2}, {3}});
+
+        let arr1 = w1.make_arr(10, 20, 30);
+        let arr2 = w2.make_arr(1.0, 2.0, 3.0);
+        test_resize<5>(arr1);
+        test_resize<1>(arr1);
+        test_resize<3>(arr1);
+        test_resize<0>(arr1);
+
+        test_reserve<5>(arr1);
+        test_reserve<1>(arr1);
+        test_reserve<3>(arr1);
+        test_reserve<0>(arr1);
+
+
+        test_resize<5>(arr2);
+        test_resize<1>(arr2);
+        test_resize<3>(arr2);
+        test_resize<0>(arr2);
+
+        test_reserve<5>(arr2);
+        test_reserve<1>(arr2);
+        test_reserve<3>(arr2);
+        test_reserve<0>(arr2);
+
+
+        test_resize<5>(arr3);
+        test_resize<1>(arr3);
+        test_resize<3>(arr3);
+        test_resize<0>(arr3);
+
+        test_reserve<5>(arr3);
+        test_reserve<1>(arr3);
+        test_reserve<3>(arr3);
+        test_reserve<0>(arr3);
+
+        runtime_assert(w1.ok());
+        runtime_assert(w2.ok());
+
+        constexpr auto test_constexpr = []{
+            test_copy<0, i32>({10, 20, 30});
+            test_copy<0, f64>({1.0, 2.0, 3.0});
+            test_copy<0, Almost_POD>(arr3);
+
+            return true;
+        }();
+    }
+
+    proc test_stack()
     {
         test_push_pop();
         test_swap();
         test_copy();
         test_move();
+        test_reserve_resize();
     }
 
     run_test(test_stack);

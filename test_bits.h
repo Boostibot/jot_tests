@@ -9,7 +9,7 @@
 namespace jot::tests 
 {
     //get_byte shoudl extract a single byte from the given value"
-    test test_get_byte()
+    proc test_get_byte()
     {
         constexpr u8 val8 = 0x11;
         constexpr u32 val32 = 0x33221100;
@@ -35,7 +35,7 @@ namespace jot::tests
     }
 
     //set_byte shoudl change single byte in the given value and return a result
-    test test_set_byte()
+    proc test_set_byte()
     {
         if constexpr (LOCAL_ENDIAN == Endian::Little)
         {
@@ -54,7 +54,7 @@ namespace jot::tests
             hybrid_assert(set_byte(val64, 2, 0x35) == 0x7766554433351100);
             hybrid_assert(set_byte(val64, 7, 0x99) == 0x9966554433221100);
 
-            test set_4 = [](f32 input){
+            proc set_4 = [](f32 input){
                 f32 valf2 = 123.0123f;
 
                 valf2 = set_byte(valf2, 0, get_byte(input, 0));
@@ -66,7 +66,7 @@ namespace jot::tests
 
             hybrid_assert(set_4(321.01513f) == 321.01513f);
 
-            //make tester and test this
+            //make tester and proc this
             //let test_array1 = []{
                 //let ar1 = to_array<u16>({0x11FF, 0x22FF, 0x33FFU, 153});
 
@@ -79,7 +79,7 @@ namespace jot::tests
     }
     //bit should retun an integer composed of all zeros except for the single bit and its value in the specified index (from lowest order bits)
     
-    test test_bit()
+    proc test_bit()
     {
         hybrid_assert(bit(2U, 1) == 0b00000100);
         hybrid_assert(bit(2U, 0) == 0b00000000);
@@ -99,7 +99,7 @@ namespace jot::tests
     }
 
     //dirty_bit should retun an integer composed of all zeros except for the single bit and its value in the specified index (does not normalize given input)
-    test test_dirty_bit()
+    proc test_dirty_bit()
     {
         hybrid_assert(dirty_bit(1U,  1) == 0b00000010);
         hybrid_assert(dirty_bit(2U,  1) == 0b00000100);
@@ -115,7 +115,7 @@ namespace jot::tests
     }
 
     //get_bit should get a single bit at the specified index (from lowest order bits)
-    test test_get_bit() 
+    proc test_get_bit() 
     {
         hybrid_assert(get_bit(0b00000001, 0) == 1);
         hybrid_assert(get_bit(0b11111101, 1) == 0);
@@ -139,7 +139,7 @@ namespace jot::tests
     }
 
     //has_bit should check if single bit at the specified index is set (does not normalize output)
-    test test_has_bit() 
+    proc test_has_bit() 
     {
         hybrid_assert(has_bit(0b00000001, 0));
         hybrid_assert(!has_bit(0b11111101, 1));
@@ -162,7 +162,7 @@ namespace jot::tests
     }
 
     //set_bit shoudl set a single bit at the specified index (from lowest order bits)
-    test test_set_bit() 
+    proc test_set_bit() 
     {
         hybrid_assert(set_bit(0b00000001, 0, 0) == 0b00000000);
         hybrid_assert(set_bit(0b00000001, 3, 0) == 0b00000001);
@@ -182,7 +182,7 @@ namespace jot::tests
     }
 
     //toggle_bit shoudl toggle (flip) a single bit at the specified index (from lowest order bits)
-    test test_toggle_bit() 
+    proc test_toggle_bit() 
     {
         hybrid_assert(toggle_bit(0b00000001, 0) == 0b00000000);
         hybrid_assert(toggle_bit(0b00000001, 3) == 0b00001001);
@@ -199,7 +199,7 @@ namespace jot::tests
     }
 
     //bitmask_higher shoudl create a binary mask with 1s masking all bits onwards from from_bit
-    test test_bitmask_higher() 
+    proc test_bitmask_higher() 
     {
         hybrid_assert(bitmask_higher<u8>(1) == 0b11111110);
         hybrid_assert(bitmask_higher<u8>(2) == 0b11111100);
@@ -211,7 +211,7 @@ namespace jot::tests
     }
 
     //bitmask_lower shoudl create a binary mask with 1s masking all bits untilto to_bit
-    test test_bitmask_lower() 
+    proc test_bitmask_lower() 
     {
         hybrid_assert(bitmask_lower<u8>(1) == 0b00000001);
 
@@ -224,7 +224,7 @@ namespace jot::tests
     }
 
     //bitmask_range shoudl create a binary mask with 1s masking all bits in the given range
-    test test_bitmask_range() 
+    proc test_bitmask_range() 
     {
         hybrid_assert(bitmask_range<u8>(1, 2) == 0b00000010);
         hybrid_assert(bitmask_range<u8>(1, 4) == 0b00001110);
@@ -247,7 +247,7 @@ namespace jot::tests
     
 
     //bitmask shoudl create a binary mask with 1s masking all bits in the given range
-    test test_bitmask() 
+    proc test_bitmask() 
     {
         hybrid_assert(bitmask<u8>(1, 1) == 0b00000010);
         hybrid_assert(bitmask<u8>(1, 3) == 0b00001110);
@@ -263,7 +263,7 @@ namespace jot::tests
     
 
     //copy_bytes should copy raw bytes and are_bytes_equal should determine if the bytes are equal
-    test test_copy_bytes()
+    proc test_copy_bytes()
     {
         //Bytes should be copied
         {
@@ -356,7 +356,7 @@ namespace jot::tests
 
 
     //byteswap shoudl swap bytes in the given type/array of bytes
-    test test_byteswap()
+    proc test_byteswap()
     {
 
         //array overload
@@ -423,7 +423,7 @@ namespace jot::tests
         }
     }
 
-    test test_bits()
+    proc test_bits()
     {
         test_get_byte();
         test_set_byte();

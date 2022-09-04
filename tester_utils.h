@@ -15,7 +15,6 @@ namespace jot::tests
 {
     constexpr bool LOG_SUCESS = false;
 
-    #define test proc
     #define runtime_assert_(ret, ...) \
         if(!(__VA_ARGS__)) { \
             if(!std::is_constant_evaluated()) \
@@ -50,7 +49,7 @@ namespace jot::tests
         return std::equal(first, first + count, second);
     }
 
-    test float_equal(let f1, let f2, f64 epsilon = 0.0001)
+    proc float_equal(let f1, let f2, f64 epsilon = 0.0001)
     {
         mut diff = f2 - f1;
         if(diff < 0)

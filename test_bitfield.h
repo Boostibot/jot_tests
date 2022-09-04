@@ -7,7 +7,7 @@
 namespace jot::tests 
 {
     //div_round_up should return multiple of modulo equal or bigger to the number given
-    test test_div_round_up()
+    proc test_div_round_up()
     {
         static_assert(div_round_up(3, 8) == 1);
         static_assert(div_round_up(1, 8) == 1);
@@ -20,7 +20,7 @@ namespace jot::tests
         static_assert(div_round_up(48, 8) == 6);
     }
 
-    test test_get_bytefield()
+    proc test_get_bytefield()
     {
         {
             constexpr u8 val = 0xAA;
@@ -83,7 +83,7 @@ namespace jot::tests
         }
     }
 
-    test test_set_bytefield()
+    proc test_set_bytefield()
     {
         {
             hybrid_assert(set_bytefield<u8>(0U, 0, 1, 0xAAU) == 0xAA);
@@ -141,7 +141,7 @@ namespace jot::tests
     }
 
 
-    test test_get_array_bytefield()
+    proc test_get_array_bytefield()
     {
         {
             constexpr byte vals[] = {0xAA, 0xBB, 0xCC, 0xDD};
@@ -237,7 +237,7 @@ namespace jot::tests
     }
 
     //get_bitfield should return an unsigned value represented by the bit span in the fields array
-    test test_get_bitfield()
+    proc test_get_bitfield()
     {
         //u8
         {
@@ -370,7 +370,7 @@ namespace jot::tests
 
     
     //set_bitfield should set a bit span in the fields array to an usnigned value
-    test test_set_bitfield()
+    proc test_set_bitfield()
     {
         //u8
         {
@@ -428,7 +428,7 @@ namespace jot::tests
         using B = Bitfield<bool, size>;
     }
     
-    test test_bit_field_info()
+    proc test_bit_field_info()
     {
         using detail::B;
 
@@ -475,7 +475,7 @@ namespace jot::tests
     }
 
     template <typename Container>
-    test test_bitfield_outside_storage()
+    proc test_bitfield_outside_storage()
     {
         using BS1 = BitStorage<
             Bitfield<bool, 1>, 
@@ -569,7 +569,7 @@ namespace jot::tests
         runtime_assert(BS1::array::get<4, u32>(conts) == 0); 
     }
 
-    test test_bitfield_inside_storage()
+    proc test_bitfield_inside_storage()
     {
         using BS1 = BitStorage<
             Bitfield<bool, 1>, 
@@ -617,7 +617,7 @@ namespace jot::tests
     }
 
     //Test get bitspan set bitspan on smaller types
-    test test_bitfield_class()
+    proc test_bitfield_class()
     {
         test_bitfield_outside_storage<u8>();
         test_bitfield_outside_storage<u16>();
@@ -626,7 +626,7 @@ namespace jot::tests
         test_bitfield_inside_storage();
     }
 
-    test test_bitfield()
+    proc test_bitfield()
     {
         test_div_round_up();
         test_get_bytefield();

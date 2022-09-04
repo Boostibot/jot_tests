@@ -17,7 +17,7 @@ namespace jot::tests
     static_assert(fraction_data<FractionData<i64, i32>>);
 
     template <class iFrac, class uFrac>
-    test test_fraction_creation()
+    proc test_fraction_creation()
     {   
         {
             iFrac frac0;
@@ -82,13 +82,13 @@ namespace jot::tests
     }
 
     template <class iFrac>
-    test test_purely_signed_fraction_creation()
+    proc test_purely_signed_fraction_creation()
     {
         //@TODO
     }
 
     template <class iFrac, class uFrac>
-    test test_fraction_specials()
+    proc test_fraction_specials()
     {   
         {
             constexpr uFrac frac1 = {18, 761};
@@ -173,7 +173,7 @@ namespace jot::tests
 
 
     template <class iFrac, class uFrac>
-    test test_fraction_comparison()
+    proc test_fraction_comparison()
     {   
         hybrid_assert(uFrac{3, 5} == uFrac{3, 5});
         hybrid_assert(uFrac{3, 5} != uFrac{4, 5});
@@ -228,7 +228,7 @@ namespace jot::tests
     }
         
     template <class iFrac>
-    test test_purely_signed_fraction_comparison()
+    proc test_purely_signed_fraction_comparison()
     {   
         hybrid_assert(iFrac{123, 321} == iFrac{-123, -321});
         hybrid_assert(iFrac{-123, 1} == iFrac{123, -1});
@@ -278,7 +278,7 @@ namespace jot::tests
     }
 
     template <class iFrac, class uFrac>
-    test test_fraction_aritmetic()
+    proc test_fraction_aritmetic()
     {
         //On normal values
         {
@@ -442,7 +442,7 @@ namespace jot::tests
     }
 
     template <class iFrac>
-    test test_purely_signed_fraction_aritmetic()
+    proc test_purely_signed_fraction_aritmetic()
     {
         {
             hybrid_assert(iFrac{0, 1} + iFrac{0, 1} == iFrac{0, 1});
@@ -578,7 +578,7 @@ namespace jot::tests
 
 
     template <class iFrac, class uFrac>
-    test test_to_fraction()
+    proc test_to_fraction()
     {
         hybrid_assert(to_fraction<iFrac>(5.347) == iFrac{5347, 1000});
         hybrid_assert(to_fraction<iFrac>(97.0) == iFrac{97, 1});
@@ -599,7 +599,7 @@ namespace jot::tests
     }
 
     template <class iFrac, class uFrac>
-    test test_normalize()
+    proc test_normalize()
     {
         hybrid_assert(normalize(iFrac{9, 11}) == iFrac{9, 11});
         hybrid_assert(normalize(iFrac{8, 4}) == iFrac{2, 1});
@@ -623,7 +623,7 @@ namespace jot::tests
     }
 
     template <class iFrac>
-    test test_purely_signed_normalize()
+    proc test_purely_signed_normalize()
     {
         hybrid_assert(normalize(iFrac{9, -11}) == iFrac{-9, 11});
         hybrid_assert(normalize(iFrac{-8, 4}) == iFrac{-2, 1});
@@ -640,7 +640,7 @@ namespace jot::tests
 
 
     template <class iFrac, class uFrac>
-    test test_single_fraction()
+    proc test_single_fraction()
     {
         test_fraction_creation<iFrac, uFrac>();
         test_fraction_specials<iFrac, uFrac>();
@@ -651,7 +651,7 @@ namespace jot::tests
     }
 
     template <class iFrac>
-    test test_purely_signed_single_fraction()
+    proc test_purely_signed_single_fraction()
     {
         test_purely_signed_fraction_creation<iFrac>();
         test_purely_signed_fraction_comparison<iFrac>();
@@ -659,7 +659,7 @@ namespace jot::tests
         test_purely_signed_normalize<iFrac>();
     }
 
-    test test_fraction()
+    proc test_fraction()
     {
 
         //test_fraction_creation
