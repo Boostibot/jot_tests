@@ -1,7 +1,5 @@
 #pragma once
 
-#include <exception>
-#include <vector>
 #include "tester_utils.h"
 
 #include "jot/defer.h"
@@ -973,7 +971,8 @@ namespace jot::stack_test
         using Size = size_t;
         using Stack = jot::Stack<T, static_cap, Size, Alloc, Grow>;
 
-        Array<T, 7> expaned = {vals[0], vals[1], vals[2], vals[1], vals[0], vals[1], vals[2]};
+        Array expaned = {vals[0], vals[1], vals[2], vals[1], vals[0], vals[1], vals[2]};
+        Slice single = expaned(0, 1);
 
         using Tested = Slice<T>;
         using Iter = stdr::iterator_t<Tested>;
@@ -981,6 +980,7 @@ namespace jot::stack_test
         static_assert(std::forward_iterator<Iter>);
         static_assert(stdr::input_range<Slice<T, Size>>);
         static_assert(stdr::forward_range<Slice<T, Size>>);
+
         {
             Stack stack;
             splice(&stack, 0, 0, vals);
@@ -990,7 +990,7 @@ namespace jot::stack_test
             runtime_assert(stack[1] == vals[1]);
             runtime_assert(stack[2] == vals[2]);
 
-            Array<T, 0> empty = {vals[0]};
+            Slice<T> empty;
             splice(&stack, 3, 0, empty);
             runtime_assert(stack.size == 3);
             runtime_assert(stack[0] == vals[0]);
@@ -1030,6 +1030,35 @@ namespace jot::stack_test
             runtime_assert(stack[5] == vals[1]);
             runtime_assert(stack[6] == vals[2]);
         }
+
+
+        {
+            
+            Stack stack;
+            resize(&stack, 3, [&](size_t i){return vals[i];});
+            runtime_assert(stack.size == 3);
+            runtime_assert(stack[0] == vals[0]);
+            runtime_assert(stack[1] == vals[1]);
+            runtime_assert(stack[2] == vals[2]);
+            
+            splice(&stack, 1, 0, single);
+            runtime_assert(stack.size == 4);
+            runtime_assert(stack[0] == vals[0]);
+            runtime_assert(stack[1] == vals[0]);
+            runtime_assert(stack[2] == vals[1]);
+            runtime_assert(stack[3] == vals[2]);
+            
+            splice(&stack, 3, 0, vals);
+            runtime_assert(stack.size == 7);
+            runtime_assert(stack[0] == vals[0]);
+            runtime_assert(stack[1] == vals[0]);
+            runtime_assert(stack[2] == vals[1]);
+            runtime_assert(stack[3] == vals[0]);
+            runtime_assert(stack[4] == vals[1]);
+            runtime_assert(stack[5] == vals[2]);
+            runtime_assert(stack[6] == vals[2]);
+            
+        }
     }
 
     proc test_splice()
@@ -1052,21 +1081,21 @@ namespace jot::stack_test
             test_splice<3>(arr2);
             test_splice<0>(arr2);
 
-            /*test_splice<5>(arr3);
+            test_splice<5>(arr3);
             test_splice<1>(arr3);
             test_splice<3>(arr3);
-            test_splice<0>(arr3);*/
+            test_splice<0>(arr3);
         }
         runtime_assert(w1.ok());
         runtime_assert(w2.ok());
 
-        /*constexpr auto test_constexpr = []{
+        constexpr auto test_constexpr = []{
             test_splice<0, i32>({10, 20, 30});
             test_splice<0, f64>({1.0, 2.0, 3.0});
             test_splice<0, Not_Copyable>(arr3);
 
             return true;
-        }();*/
+        }();
     }
 
 
