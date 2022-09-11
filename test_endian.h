@@ -113,9 +113,9 @@ namespace jot::tests
         }
         */
 
-        /*ByteArray<3> in2 = {111, 121, 131};
-        ByteArray<7> in1 = {1, 2, 3, 4, 5, 6, 7};
-        ByteArray<4> in1 = {4, 3, 2, 1};*/
+        /*Byte_Array<3> in2 = {111, 121, 131};
+        Byte_Array<7> in1 = {1, 2, 3, 4, 5, 6, 7};
+        Byte_Array<4> in1 = {4, 3, 2, 1};*/
         //REQUIRE(true == true);
     }
     //to_endian should convert given integer withe the source and target endian and save resulting bytes to bytes

@@ -44,8 +44,8 @@ namespace jot::tests
             constexpr let rep = to_array<u8>({0xAA, 0xBB, 0xCC, 0xDD});
             constexpr u32 val = from_bytes<u32>(rep);
 
-            constexpr u32 subval1 = from_bytes<u16>(ByteArray<2>{0xAA, 0xBB});
-            constexpr u32 subval2 = from_bytes<u16>(ByteArray<2>{0xBB, 0xCC});
+            constexpr u32 subval1 = from_bytes<u16>(Byte_Array<2>{0xAA, 0xBB});
+            constexpr u32 subval2 = from_bytes<u16>(Byte_Array<2>{0xBB, 0xCC});
 
             hybrid_assert(get_bytefield<u32>(val, 3, 0) == 0);
             hybrid_assert(get_bytefield<u32>(val, 0, 2) == subval1);
@@ -61,10 +61,10 @@ namespace jot::tests
             constexpr let rep = to_array<u8>({0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF, 0x00, 0x88});
             constexpr u64 val = from_bytes<u64>(rep);
 
-            constexpr u64 subval1 = from_bytes<u16>(ByteArray<2>{0x00, 0x88});
-            constexpr u64 subval2 = from_bytes<u16>(ByteArray<2>{0xEE, 0xFF});
-            constexpr u64 subval3 = from_bytes<u32>(ByteArray<4>{0xEE, 0xFF, 0x00, 0x88});
-            constexpr u64 subval4 = from_bytes<u32>(ByteArray<4>{0xAA, 0xBB, 0xCC, 0xDD});
+            constexpr u64 subval1 = from_bytes<u16>(Byte_Array<2>{0x00, 0x88});
+            constexpr u64 subval2 = from_bytes<u16>(Byte_Array<2>{0xEE, 0xFF});
+            constexpr u64 subval3 = from_bytes<u32>(Byte_Array<4>{0xEE, 0xFF, 0x00, 0x88});
+            constexpr u64 subval4 = from_bytes<u32>(Byte_Array<4>{0xAA, 0xBB, 0xCC, 0xDD});
 
             hybrid_assert(get_bytefield<u64>(val, 7, 1) == 0x88);
             hybrid_assert(get_bytefield<u64>(val, 6, 1) == 0x00);
@@ -93,7 +93,7 @@ namespace jot::tests
 
             constexpr let val1 = set_bytefield<u16>(0U, 0, 1, 0xAAU);
             constexpr let val2 = set_bytefield<u16>(val1, 1, 1, 0xBBU);
-            constexpr let composed = from_bytes<u16>(ByteArray<2>{0xAA, 0xBB});
+            constexpr let composed = from_bytes<u16>(Byte_Array<2>{0xAA, 0xBB});
 
             hybrid_assert(get_bytefield<u16>(val1, 0, 0) == 0x00);
             hybrid_assert(get_bytefield<u16>(val1, 0, 1) == 0xAA);
@@ -107,8 +107,8 @@ namespace jot::tests
             constexpr let val3 = set_bytefield<u32>(val2, 2, 1, 0xCCU);
             constexpr let val4 = set_bytefield<u32>(val3, 3, 1, 0xDDU);
 
-            constexpr let composed = from_bytes<u32>(ByteArray<4>{0xAA, 0xBB, 0xCC, 0xDD});
-            constexpr let sub_coposed = from_bytes<u32>(ByteArray<4>{0xBB, 0xCC});
+            constexpr let composed = from_bytes<u32>(Byte_Array<4>{0xAA, 0xBB, 0xCC, 0xDD});
+            constexpr let sub_coposed = from_bytes<u32>(Byte_Array<4>{0xBB, 0xCC});
 
             hybrid_assert(get_bytefield<u32>(val4, 0, 0) == 0x00);
             hybrid_assert(get_bytefield<u32>(val4, 1, 1) == 0xBB);
@@ -432,11 +432,11 @@ namespace jot::tests
     {
         using detail::B;
 
-        using BS1 = BitStorage<B<1>, B<4>, B<8>, B<3>>;
-        using BS2 = BitStorage<B<1>, B<4>, B<3>, B<8>>;
-        using BS3 = BitStorage<B<2>, B<4>, B<3>, B<8>>;
-        using BS4 = BitStorage<B<1>, B<3>>;
-        using BS5 = BitStorage<B<1>, B<32>, B<31>, B<34>, B<1>, B<1>, B<1>>;
+        using BS1 = Bit_Storage<B<1>, B<4>, B<8>, B<3>>;
+        using BS2 = Bit_Storage<B<1>, B<4>, B<3>, B<8>>;
+        using BS3 = Bit_Storage<B<2>, B<4>, B<3>, B<8>>;
+        using BS4 = Bit_Storage<B<1>, B<3>>;
+        using BS5 = Bit_Storage<B<1>, B<32>, B<31>, B<34>, B<1>, B<1>, B<1>>;
 
         //byte_size, bit_count and field_count should match
         static_assert(BS1::byte_size == 2);
@@ -477,7 +477,7 @@ namespace jot::tests
     template <typename Container>
     proc test_bitfield_outside_storage()
     {
-        using BS1 = BitStorage<
+        using BS1 = Bit_Storage<
             Bitfield<bool, 1>, 
             Bitfield<u16, 4>, 
             Bitfield<u64, 8>, 
@@ -571,7 +571,7 @@ namespace jot::tests
 
     proc test_bitfield_inside_storage()
     {
-        using BS1 = BitStorage<
+        using BS1 = Bit_Storage<
             Bitfield<bool, 1>, 
             Bitfield<u16, 4>, 
             Bitfield<u16, 8>, 

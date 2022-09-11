@@ -1,20 +1,20 @@
 #pragma once
 #include "tester_utils.h"
-#include "jot/experimental/esoteric_fraction.h"
-#include "jot/defines.h"
+#include "../jot/experimental/esoteric_fraction.h"
+#include "../jot/defines.h"
 
 namespace jot::tests 
 {
-    static_assert(fraction_data<FractionData<u8, u8>>);
-    static_assert(fraction_data<FractionData<i8, i8>>);
-    static_assert(fraction_data<FractionData<u32, u32>>);
-    static_assert(fraction_data<FractionData<i32, i32>>);
-    static_assert(fraction_data<FractionData<i32, u32>>);
-    static_assert(fraction_data<FractionData<i32, u8>>);
-    static_assert(fraction_data<FractionData<i8, u64>>);
-    static_assert(fraction_data<FractionData<u64, u64>>);
-    static_assert(fraction_data<FractionData<i64, i64>>);
-    static_assert(fraction_data<FractionData<i64, i32>>);
+    static_assert(fraction_data<Fraction_Data<u8, u8>>);
+    static_assert(fraction_data<Fraction_Data<i8, i8>>);
+    static_assert(fraction_data<Fraction_Data<u32, u32>>);
+    static_assert(fraction_data<Fraction_Data<i32, i32>>);
+    static_assert(fraction_data<Fraction_Data<i32, u32>>);
+    static_assert(fraction_data<Fraction_Data<i32, u8>>);
+    static_assert(fraction_data<Fraction_Data<i8, u64>>);
+    static_assert(fraction_data<Fraction_Data<u64, u64>>);
+    static_assert(fraction_data<Fraction_Data<i64, i64>>);
+    static_assert(fraction_data<Fraction_Data<i64, i32>>);
 
     template <class iFrac, class uFrac>
     proc test_fraction_creation()
@@ -636,7 +636,7 @@ namespace jot::tests
     }
 
     template<typename Num, typename Den> 
-    using ManFrac = ManualFraction<FractionData<Num, Den>>;
+    using ManFrac = Manual_Fraction<Fraction_Data<Num, Den>>;
 
 
     template <class iFrac, class uFrac>
