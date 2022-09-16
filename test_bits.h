@@ -8,6 +8,17 @@
 
 namespace jot::tests 
 {
+    struct Test_Struct 
+    {
+        i32 i1 = -51631;
+        i32 i2 = 63464;
+        u8 u1 = 144;
+        f64 f1 = -5151.54684646;
+        u8 u2 = 64;
+
+        proc operator<=>(const Test_Struct&) const = default;
+    };
+
     //get_byte shoudl extract a single byte from the given value"
     proc test_get_byte()
     {
@@ -303,11 +314,11 @@ namespace jot::tests
                 runtime_assert(are_bytes_equal(d_output, expected, sizeof(expected)));
             }
 
-            //TestStruct1 data
+            //Test_Struct data
             {
-                TestStruct1 input;
-                TestStruct1 output2 = {0};
-                TestStruct1 expected;
+                Test_Struct input;
+                Test_Struct output2 = {0};
+                Test_Struct expected;
                 byte output[100] = {255, 254, 253};
 
                 runtime_assert(expected != output2);
@@ -335,9 +346,9 @@ namespace jot::tests
 
             constexpr let context2 = []{
                 byte output[100] = {0};
-                TestStruct1 input;
-                TestStruct1 output2 = {0};
-                TestStruct1 expected;
+                Test_Struct input;
+                Test_Struct output2 = {0};
+                Test_Struct expected;
 
                 copy_bytes(&output2, &input, sizeof(expected));
                 copy_bytes(output, &input, sizeof(expected));

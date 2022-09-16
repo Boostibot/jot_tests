@@ -8,6 +8,17 @@
 namespace jot::tests
 {
 
+    struct TestStruct1 
+    {
+        i32 i1 = -51631;
+        i32 i2 = 63464;
+        u8 u1 = 144;
+        f64 f1 = -5151.54684646;
+        u8 u2 = 64;
+
+        proc operator<=>(const TestStruct1&) const = default;
+    };
+
     proc test_construction()
     {
         Array<u8, 0> empty;

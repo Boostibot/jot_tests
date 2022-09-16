@@ -58,27 +58,6 @@ namespace jot::tests
         return diff < epsilon;
     }
 
-    struct TestStruct1 
-    {
-        i32 i1 = -51631;
-        i32 i2 = 63464;
-        u8 u1 = 144;
-        f64 f1 = -5151.54684646;
-        u8 u2 = 64;
-
-        proc operator<=>(const TestStruct1&) const = default;
-    };
-
-    struct TestStruct2 
-    {
-        u8 uarr[3] = {1, 2, 123};
-        i32 iarr[4] = {-51631, 63464, 0, 9849636};
-        u8 u1 = 144;
-        f64 farr[5] = {-5151.54684646, 999999, -999999, 0.00003, -0.00003};
-        u8 u2 = 64;
-
-        proc operator<=>(const TestStruct2&) const = default;
-    };
 
 }
 
