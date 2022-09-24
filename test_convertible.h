@@ -1,6 +1,7 @@
 #pragma once
 #include "tester_utils.h"
-#include "jot/defines.h"
+#include "../jot/types.h"
+#include "../jot/defines.h"
 
 namespace jot::tests 
 {
@@ -57,4 +58,4 @@ namespace jot::tests
     }
 }
 
-#include "jot/undefs.h"
+#include "../jot/undefs.h"

@@ -1,24 +1,24 @@
 #pragma once
 
-#include "tester_utils.h"
+#include "../jot/experimental/egnostic_endian.h"
+#include "../jot/array.h"
 
-#include "jot/experimental/egnostic_endian.h"
-#include "jot/array.h"
-#include "jot/defines.h"
+#include "tester_utils.h"
+#include "../jot/defines.h"
 
 namespace jot::tests
 {
     //from_shifted_bytes should shift all bytes by the given offsets and binary or them into a value
     proc test_from_shifted_bytes()
     {
-        constexpr Array<byte, 8> little_shifts = {0, 8, 16, 24, 32, 40, 48, 56};
-        constexpr Array<byte, 8> big_shifts    = {56, 48, 40, 32, 24, 16, 8, 0};
-        constexpr Array<byte, 8> swap_two      = {8, 0, 24, 16, 40, 32, 56, 48};
-        constexpr Array<byte, 8> all_on_one    = {0};
+        constexpr Array_<byte, 8> little_shifts = {0, 8, 16, 24, 32, 40, 48, 56};
+        constexpr Array_<byte, 8> big_shifts    = {56, 48, 40, 32, 24, 16, 8, 0};
+        constexpr Array_<byte, 8> swap_two      = {8, 0, 24, 16, 40, 32, 56, 48};
+        constexpr Array_<byte, 8> all_on_one    = {0};
 
         //shifting empty should return 0")
         {
-            constexpr Array<byte, 0> empty = {0};
+            constexpr Array_<byte, 0> empty = {0};
 
             hybrid_assert(egnostic::from_shifted_bytes<u64>(empty, little_shifts, empty.size) == 0);
             hybrid_assert(egnostic::from_shifted_bytes<u64>(empty, big_shifts, empty.size) == 0);
@@ -27,7 +27,7 @@ namespace jot::tests
     
         //shifting should shift accordingly")
         {
-            constexpr Array<byte, 8> bytes = {1, 2, 3, 4, 5, 6, 7, 8};
+            constexpr Array_<byte, 8> bytes = {1, 2, 3, 4, 5, 6, 7, 8};
             hybrid_assert(egnostic::from_shifted_bytes<u64>(bytes, little_shifts, bytes.size) == 0x0807060504030201);
             hybrid_assert(egnostic::from_shifted_bytes<u64>(bytes, big_shifts, bytes.size) == 0x0102030405060708);
             hybrid_assert(egnostic::from_shifted_bytes<u64>(bytes, swap_two, bytes.size)   == 0x0708050603040102);
@@ -38,17 +38,17 @@ namespace jot::tests
         {
             //shifting less then shift mask should only shift the given bytes")
             {
-                constexpr Array<byte, 4> bytes_1 = {1};
+                constexpr Array_<byte, 4> bytes_1 = {1};
                 hybrid_assert(egnostic::from_shifted_bytes<u64>(bytes_1, little_shifts, bytes_1.size) == 0x01);
                 hybrid_assert(egnostic::from_shifted_bytes<u64>(bytes_1, big_shifts, bytes_1.size) == 0x0100000000000000);
                 hybrid_assert(egnostic::from_shifted_bytes<u64>(bytes_1, swap_two, bytes_1.size) == 0x0100);
 
-                constexpr Array<byte, 4> bytes_2 = {1, 2};
+                constexpr Array_<byte, 4> bytes_2 = {1, 2};
                 hybrid_assert(egnostic::from_shifted_bytes<u64>(bytes_2, little_shifts, bytes_2.size) == 0x0201);
                 hybrid_assert(egnostic::from_shifted_bytes<u64>(bytes_2, big_shifts, bytes_2.size) == 0x0102000000000000);
                 hybrid_assert(egnostic::from_shifted_bytes<u64>(bytes_2, swap_two, bytes_2.size) == 0x0102);
 
-                constexpr Array<byte, 4> bytes_4 = {1, 2, 3, 4};
+                constexpr Array_<byte, 4> bytes_4 = {1, 2, 3, 4};
                 hybrid_assert(egnostic::from_shifted_bytes<u64>(bytes_4, little_shifts, bytes_4.size) == 0x04030201);
                 hybrid_assert(egnostic::from_shifted_bytes<u64>(bytes_4, big_shifts, bytes_4.size) == 0x0102030400000000);
                 hybrid_assert(egnostic::from_shifted_bytes<u64>(bytes_4, swap_two, bytes_4.size) == 0x03040102);
@@ -59,7 +59,7 @@ namespace jot::tests
     template <typename type, size_t size>
     func to_shifted_bytes_tester(type value, let shifts)
     {
-        Array<byte , size> out = {0};
+        Array_<byte , size> out = {0};
         egnostic::to_shifted_bytes(value, out, shifts, size);
         return out;
     }
@@ -67,14 +67,14 @@ namespace jot::tests
     //to_shifted_bytes should set value of each of given byte to the given value shifted by the according shift
     proc test_to_shifted_bytes()
     {
-        constexpr Array<u8, 8> little_shifts = {0, 8, 16, 24, 32, 40, 48, 56};
-        constexpr Array<u8, 8> big_shifts    = {56, 48, 40, 32, 24, 16, 8, 0};
-        constexpr Array<u8, 8> swap_two      = {8, 0, 24, 16, 40, 32, 56, 48};
-        constexpr Array<u8, 8> all_on_one    = {0};
+        constexpr Array_<u8, 8> little_shifts = {0, 8, 16, 24, 32, 40, 48, 56};
+        constexpr Array_<u8, 8> big_shifts    = {56, 48, 40, 32, 24, 16, 8, 0};
+        constexpr Array_<u8, 8> swap_two      = {8, 0, 24, 16, 40, 32, 56, 48};
+        constexpr Array_<u8, 8> all_on_one    = {0};
 
         //shifting to empty shoudl do nothing")
         {
-            constexpr Array<u8, 0> empty = {0};
+            constexpr Array_<u8, 0> empty = {0};
             
             hybrid_assert(to_shifted_bytes_tester<u64, 0>(1246443, little_shifts) == empty);
             hybrid_assert(to_shifted_bytes_tester<u64, 0>(0,       big_shifts) == empty);
@@ -173,7 +173,7 @@ namespace jot::tests
     template<size_t size>
     func to_endian_tester(let value, let endian)
     {
-        Array<u8, size> bytes = {0};
+        Array_<u8, size> bytes = {0};
         egnostic::to_endian(value, bytes, endian);
         return bytes;
     }
@@ -183,7 +183,7 @@ namespace jot::tests
     {
         //size 1
         {
-            constexpr Array<u8, 1> exp1 = {1};
+            constexpr Array_<u8, 1> exp1 = {1};
             hybrid_assert(to_endian_tester<1>(0x01, Endian::Little) == exp1);
             hybrid_assert(to_endian_tester<1>(0x01, Endian::Big) == exp1);
             hybrid_assert(to_endian_tester<1>(0x01, Endian::LittleWord) == exp1);
@@ -192,7 +192,7 @@ namespace jot::tests
     
         //size 2
         {
-            constexpr Array<u8, 2> exp2 = {1, 2};
+            constexpr Array_<u8, 2> exp2 = {1, 2};
             hybrid_assert(to_endian_tester<2>(0x0201, Endian::Little) == exp2);
             hybrid_assert(to_endian_tester<2>(0x0102, Endian::Big) == exp2);
             hybrid_assert(to_endian_tester<2>(0x0201, Endian::LittleWord) == exp2);
@@ -201,7 +201,7 @@ namespace jot::tests
     
         //size 4
         {
-            constexpr Array<u8, 4> exp4 = {1, 2, 3, 4};
+            constexpr Array_<u8, 4> exp4 = {1, 2, 3, 4};
             hybrid_assert(to_endian_tester<4>(0x04030201, Endian::Little) == exp4);
             hybrid_assert(to_endian_tester<4>(0x01020304, Endian::Big) == exp4);
             hybrid_assert(to_endian_tester<4>(0x02010403, Endian::LittleWord) == exp4);
@@ -210,7 +210,7 @@ namespace jot::tests
     
         //size 8
         {
-            constexpr Array<u8, 8> exp8 = {1, 2, 3, 4, 5, 6, 7, 8};
+            constexpr Array_<u8, 8> exp8 = {1, 2, 3, 4, 5, 6, 7, 8};
             hybrid_assert(to_endian_tester<8>(0x0807060504030201, Endian::Little) == exp8);
             hybrid_assert(to_endian_tester<8>(0x0102030405060708, Endian::Big) == exp8);
             hybrid_assert(to_endian_tester<8>(0x0201040306050807, Endian::LittleWord) == exp8);
@@ -220,7 +220,7 @@ namespace jot::tests
 
         //size 3
         {
-            constexpr Array<u8, 3> exp3 = {1, 2, 3};
+            constexpr Array_<u8, 3> exp3 = {1, 2, 3};
             hybrid_assert(to_endian_tester<3>(0x030201, Endian::Little) == exp3);
             hybrid_assert(to_endian_tester<3>(0x010203, Endian::Big) == exp3);
             hybrid_assert(to_endian_tester<3>(0x10302, Endian::LittleWord) == exp3);
@@ -229,7 +229,7 @@ namespace jot::tests
 
         //size 5
         {
-            constexpr Array<u8, 5> exp5 = {1, 2, 3, 4, 5};
+            constexpr Array_<u8, 5> exp5 = {1, 2, 3, 4, 5};
             hybrid_assert(to_endian_tester<5>(0x0504030201, Endian::Little) == exp5);
             hybrid_assert(to_endian_tester<5>(0x0102030405, Endian::Big) == exp5);
         }
@@ -237,7 +237,7 @@ namespace jot::tests
         //size 6
         {
 
-            constexpr Array<u8, 6> exp6 = {1, 2, 3, 4, 5, 6};
+            constexpr Array_<u8, 6> exp6 = {1, 2, 3, 4, 5, 6};
             hybrid_assert(to_endian_tester<6>(0x060504030201, Endian::Little) == exp6);
             hybrid_assert(to_endian_tester<6>(0x010203040506, Endian::Big) == exp6);
             hybrid_assert(to_endian_tester<6>(0x020104030605, Endian::LittleWord) == exp6);
@@ -246,7 +246,7 @@ namespace jot::tests
 
         //size 7
         {
-            constexpr Array<u8, 7> exp7 = {1, 2, 3, 4, 5, 6, 7};
+            constexpr Array_<u8, 7> exp7 = {1, 2, 3, 4, 5, 6, 7};
             hybrid_assert(to_endian_tester<7>(0x07060504030201, Endian::Little) == exp7);
             hybrid_assert(to_endian_tester<7>(0x01020304050607, Endian::Big) == exp7);
         }
@@ -263,4 +263,4 @@ namespace jot::tests
     run_test(test_egnostic_endian);
 }
 
-#include "jot/undefs.h"
+#include "../jot/undefs.h"

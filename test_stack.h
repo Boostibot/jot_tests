@@ -86,7 +86,7 @@ namespace jot::stack_test
 
         template<typename... Ts>
         proc make_arr(Ts... args) 
-            { return Array<Test_Res<T>, sizeof...(args)>{make(args)...}; }
+            { return Array_<Test_Res<T>, sizeof...(args)>{make(args)...}; }
 
         proc total_constructed() 
             { return stats.move_constr + stats.copy_constr + stats.own_constr; }
@@ -99,14 +99,14 @@ namespace jot::stack_test
     };
 
     template<typename T>
-    proc test_push_pop(Array<T, 3> vals)
+    proc test_push_pop(Array_<T, 3> vals)
     {
         using Grow = Def_Grow<2, 0, 6>;
         using Alloc = Def_Alloc<T>;
         using Size = size_t;
 
         {
-            Stack<T, 2, Size, Alloc, Grow> stack;
+            Stack_<T, 2, Size, Alloc, Grow> stack;
 
             runtime_assert(stack.data == 0);
             runtime_assert(stack.size == 0);
@@ -144,14 +144,14 @@ namespace jot::stack_test
     }
 
     template<typename T>
-    proc test_push_pop_constexpr(Array<T, 3> vals)
+    proc test_push_pop_constexpr(Array_<T, 3> vals)
     {
         using Grow = Def_Grow<2, 0, 6>;
         using Alloc = Def_Alloc<T>;
         using Size = size_t;
 
         {
-            Stack<T, 0, Size, Alloc, Grow> stack;
+            Stack_<T, 0, Size, Alloc, Grow> stack;
 
             runtime_assert(stack.data == 0);
             runtime_assert(stack.size == 0);
@@ -212,12 +212,12 @@ namespace jot::stack_test
     }
 
     template<size_t static_cap, typename T>
-    proc test_copy(Array<T, 3> vals)
+    proc test_copy(Array_<T, 3> vals)
     {
         using Grow = Def_Grow<2, 0, 6>;
         using Alloc = Def_Alloc<T>;
         using Size = size_t;
-        using Stack = jot::Stack<T, static_cap, Size, Alloc, Grow>;
+        using Stack = jot::Stack_<T, static_cap, Size, Alloc, Grow>;
 
         {
             Stack stack;
@@ -314,12 +314,12 @@ namespace jot::stack_test
     }
 
     template<size_t static_cap, typename T>
-    proc test_swap(Array<T, 6> vals)
+    proc test_swap(Array_<T, 6> vals)
     {
         using Grow = Def_Grow<2, 0, 6>;
         using Alloc = Def_Alloc<T>;
         using Size = size_t;
-        using Stack = jot::Stack<T, static_cap, Size, Alloc, Grow>;
+        using Stack = jot::Stack_<T, static_cap, Size, Alloc, Grow>;
 
         {
             Stack stack1;
@@ -423,12 +423,12 @@ namespace jot::stack_test
     }
 
     template<size_t static_cap, typename T>
-    proc test_move(Array<T, 6> vals)
+    proc test_move(Array_<T, 6> vals)
     {
         using Grow = Def_Grow<2, 0, 6>;
         using Alloc = Def_Alloc<T>;
         using Size = size_t;
-        using Stack = jot::Stack<T, static_cap, Size, Alloc, Grow>;
+        using Stack = jot::Stack_<T, static_cap, Size, Alloc, Grow>;
 
         {
             Stack stack1;
@@ -588,12 +588,12 @@ namespace jot::stack_test
     }
 
     template<size_t static_cap, typename T>
-    proc test_reserve(Array<T, 3> vals)
+    proc test_reserve(Array_<T, 3> vals)
     {
         using Grow = Def_Grow<2, 0, 6>;
         using Alloc = Def_Alloc<T>;
         using Size = size_t;
-        using Stack = jot::Stack<T, static_cap, Size, Alloc, Grow>;
+        using Stack = jot::Stack_<T, static_cap, Size, Alloc, Grow>;
 
         static_assert(static_cap <= 6, "static capacity is assumed to be below 7");
 
@@ -644,12 +644,12 @@ namespace jot::stack_test
     }
 
     template<size_t static_cap, typename T>
-    proc test_resize(Array<T, 3> vals)
+    proc test_resize(Array_<T, 3> vals)
     {
         using Grow = Def_Grow<2, 0, 6>;
         using Alloc = Def_Alloc<T>;
         using Size = size_t;
-        using Stack = jot::Stack<T, static_cap, Size, Alloc, Grow>;
+        using Stack = jot::Stack_<T, static_cap, Size, Alloc, Grow>;
 
         static_assert(static_cap <= 6, "static capacity is assumed to be below 7");
         //resizing empty stack
@@ -761,12 +761,12 @@ namespace jot::stack_test
     }
 
     template<size_t static_cap, typename T>
-    proc test_insert_remove(Array<T, 3> vals)
+    proc test_insert_remove(Array_<T, 3> vals)
     {
         using Grow = Def_Grow<2, 0, 6>;
         using Alloc = Def_Alloc<T>;
         using Size = size_t;
-        using Stack = jot::Stack<T, static_cap, Size, Alloc, Grow>;
+        using Stack = jot::Stack_<T, static_cap, Size, Alloc, Grow>;
 
         {
             Stack stack;
@@ -871,12 +871,12 @@ namespace jot::stack_test
     }
 
     template<size_t static_cap, typename T>
-    proc test_slicing_and_common_ops(Array<T, 3> vals)
+    proc test_slicing_and_common_ops(Array_<T, 3> vals)
     {
         using Grow = Def_Grow<2, 0, 6>;
         using Alloc = Def_Alloc<T>;
         using Size = size_t;
-        using Stack = jot::Stack<T, static_cap, Size, Alloc, Grow>;
+        using Stack = jot::Stack_<T, static_cap, Size, Alloc, Grow>;
 
 
         {
@@ -909,10 +909,10 @@ namespace jot::stack_test
             runtime_assert(empty(stack) == false);
             runtime_assert(is_empty(stack) == false);
 
-            Slice<T> slice1 = {std::begin(stack), std::end(stack)};
-            Slice<T> slice2 = stack(BEGIN, END);
-            Slice<T> slice3 = stack;
-            Slice slice4 = stack;
+            Slice_<T> slice1 = {std::begin(stack), std::end(stack)};
+            Slice_<T> slice2 = stack(BEGIN, END);
+            Slice_<T> slice3 = stack;
+            Slice_ slice4 = stack;
 
             for(auto i = 0; i < std::size(stack); i++)
             {
@@ -964,22 +964,22 @@ namespace jot::stack_test
 
 
     template<size_t static_cap, typename T>
-    proc test_splice(Array<T, 3> vals)
+    proc test_splice(Array_<T, 3> vals)
     {
         using Grow = Def_Grow<2, 0, 6>;
         using Alloc = Def_Alloc<T>;
         using Size = size_t;
-        using Stack = jot::Stack<T, static_cap, Size, Alloc, Grow>;
+        using Stack = jot::Stack_<T, static_cap, Size, Alloc, Grow>;
 
-        Array expaned = {vals[0], vals[1], vals[2], vals[1], vals[0], vals[1], vals[2]};
-        Slice single = expaned(0, 1);
+        Array_ expaned = {vals[0], vals[1], vals[2], vals[1], vals[0], vals[1], vals[2]};
+        Slice_ single = expaned(0, 1);
 
-        using Tested = Slice<T>;
+        using Tested = Slice_<T>;
         using Iter = stdr::iterator_t<Tested>;
 
         static_assert(std::forward_iterator<Iter>);
-        static_assert(stdr::input_range<Slice<T, Size>>);
-        static_assert(stdr::forward_range<Slice<T, Size>>);
+        static_assert(stdr::input_range<Slice_<T, Size>>);
+        static_assert(stdr::forward_range<Slice_<T, Size>>);
 
         {
             Stack stack;
@@ -990,7 +990,7 @@ namespace jot::stack_test
             runtime_assert(stack[1] == vals[1]);
             runtime_assert(stack[2] == vals[2]);
 
-            Slice<T> empty;
+            Slice_<T> empty;
             splice(&stack, 3, 0, empty);
             runtime_assert(stack.size == 3);
             runtime_assert(stack[0] == vals[0]);

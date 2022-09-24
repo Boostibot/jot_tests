@@ -83,8 +83,8 @@ namespace jot::tests
 
             //};
 
-            constexpr Array ar2 = {0x11FF, 0x22FF, 0x33FFU, -153};
-            constexpr Array ar3 = {0xFFFF, 0x22FF, 0x33FFU, -153};
+            constexpr Array_ ar2 = {0x11FF, 0x22FF, 0x33FFU, -153};
+            constexpr Array_ ar3 = {0xFFFF, 0x22FF, 0x33FFU, -153};
 
         }
     }
