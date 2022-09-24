@@ -34,7 +34,7 @@ namespace jot::tests
             runtime_assert(numerator(frac0) == 3195);
             runtime_assert(denominator(frac0) == 1192);
 
-            runtime_assert(numerator(frac0, 1291) == 1291);
+            runtime_assert(numerator(&frac0, 1291) == 1291);
             runtime_assert(numerator(frac0) == 1291);
             runtime_assert(denominator(frac0) == 1192);
 
@@ -152,9 +152,9 @@ namespace jot::tests
             hybrid_assert(is_infinity(infinity<iFrac>()));
             hybrid_assert(is_negative_infinity(negative_infinity<iFrac>()));
 
-            nan(ifr1);
-            infinity(ifr2);
-            negative_infinity(ifr3);
+            nan(&ifr1);
+            infinity(&ifr2);
+            negative_infinity(&ifr3);
 
             runtime_assert(is_nan(ifr1));
             runtime_assert(is_infinity(ifr2));
@@ -163,8 +163,8 @@ namespace jot::tests
             hybrid_assert(is_nan(nan<uFrac>()));
             hybrid_assert(is_infinity(infinity<uFrac>()));
 
-            nan(ufr1);
-            infinity(ufr2);
+            nan(&ufr1);
+            infinity(&ufr2);
 
             runtime_assert(is_nan(ufr1));
             runtime_assert(is_infinity(ufr2));
@@ -690,4 +690,4 @@ namespace jot::tests
     run_test(test_fraction);
 }
 
-#include "jot/undefs.h"
+#include "../jot/undefs.h"

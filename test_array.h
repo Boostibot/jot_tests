@@ -21,8 +21,8 @@ namespace jot::tests
 
     proc test_construction()
     {
-        Array<u8, 0> empty;
-        constexpr Array<u8, 0> empty_constexpr2 = {0};
+        Array_<u8, 0> empty;
+        constexpr Array_<u8, 0> empty_constexpr2 = {0};
 
         static_assert(empty.size == 0);
         static_assert(empty_constexpr2.size == 0);
@@ -31,15 +31,15 @@ namespace jot::tests
         static_assert(empty_constexpr2.capacity == 0);
 
         //Non empty array needs to initialized (compiles because unint is not constexpr)
-        Array<u8, 10> uninit1;
-        Array<TestStruct1, 10> uninit2;
+        Array_<u8, 10> uninit1;
+        Array_<TestStruct1, 10> uninit2;
 
         static_assert(uninit1.capacity == 10);
         static_assert(uninit2.capacity == 10);
 
         //C-like zero init
-        constexpr Array<u8, 10> non_empty1 = {0};
-        constexpr Array<TestStruct1, 10> non_empty2 = {TestStruct1()};
+        constexpr Array_<u8, 10> non_empty1 = {0};
+        constexpr Array_<TestStruct1, 10> non_empty2 = {TestStruct1()};
 
         static_assert(non_empty1.size == 10);
         static_assert(non_empty2.size == 10);
@@ -52,11 +52,11 @@ namespace jot::tests
         hybrid_assert(non_empty2[7] == TestStruct1());
 
         //Deduction
-        constexpr Array deduced1 = {1, 2, 3, 4, 5};
-        constexpr Array deduced2 = {1.1, 2.1, 3.1, 4, 5.8};
-        constexpr Array deduced3 = {1U, 2, 3, 4, 5};
-        constexpr Array deduced4 = {true, true, false};
-        constexpr Array deduced5 = {TestStruct1(), TestStruct1()};
+        constexpr Array_ deduced1 = {1, 2, 3, 4, 5};
+        constexpr Array_ deduced2 = {1.1, 2.1, 3.1, 4, 5.8};
+        constexpr Array_ deduced3 = {1U, 2, 3, 4, 5};
+        constexpr Array_ deduced4 = {true, true, false};
+        constexpr Array_ deduced5 = {TestStruct1(), TestStruct1()};
 
         static_assert(deduced1.size == 5);
         static_assert(deduced2.size == 5);
@@ -81,7 +81,7 @@ namespace jot::tests
     proc test_destructuring()
     {
         {
-            constexpr Array arr = {1, 2, 3};
+            constexpr Array_ arr = {1, 2, 3};
             auto el1 = std::get<0>(arr);
             auto el2 = std::get<1>(arr);
             auto el3 = std::get<2>(arr);
@@ -89,12 +89,12 @@ namespace jot::tests
             static_assert(are_same_v<decltype(a), decltype(b), decltype(c), int>);
         }
         {
-            constexpr Array arr = {1};
+            constexpr Array_ arr = {1};
             auto [a] = arr;
             static_assert(are_same_v<decltype(a), int>);
         }
         {
-            constexpr Array arr = {1.5, 1, 3, 7};
+            constexpr Array_ arr = {1.5, 1, 3, 7};
             auto [a, b, c, d] = arr;
             static_assert(are_same_v<decltype(a), decltype(b), decltype(c), decltype(d), double>);
         }
@@ -102,9 +102,9 @@ namespace jot::tests
 
     proc test_comparison()
     {
-        constexpr Array int1 = {1, 2, 3, 4, 5};
-        constexpr Array int2 = {1, 2, 3, 4, 5};
-        constexpr Array int3 = {5, 2, 3, 4, 5};
+        constexpr Array_ int1 = {1, 2, 3, 4, 5};
+        constexpr Array_ int2 = {1, 2, 3, 4, 5};
+        constexpr Array_ int3 = {5, 2, 3, 4, 5};
 
         static_assert(int2 < int3 == true);
         static_assert(int2 > int3 == false);
@@ -137,9 +137,9 @@ namespace jot::tests
         hybrid_assert(int2 <= int3 == true);
         hybrid_assert(int2 != int3);
 
-        constexpr Array struct1 = {TestStruct1(), TestStruct1()};
-        constexpr Array struct2 = {TestStruct1(), TestStruct1()};
-        constexpr Array<TestStruct1, 2> struct3 = {TestStruct1(), {1}};
+        constexpr Array_ struct1 = {TestStruct1(), TestStruct1()};
+        constexpr Array_ struct2 = {TestStruct1(), TestStruct1()};
+        constexpr Array_<TestStruct1, 2> struct3 = {TestStruct1(), {1}};
 
         hybrid_assert(struct1 == struct1);
         hybrid_assert(struct1 >= struct1);
@@ -157,11 +157,11 @@ namespace jot::tests
 
     proc test_assignment()
     {
-        Array deduced1 = {1, 2, 3, 4, 5};
-        Array deduced2 = {1.1, 2.1, 3.1, 4, 5.8};
-        Array deduced3 = {1U, 2, 3, 4, 5};
-        Array deduced4 = {true, true, false};
-        Array deduced5 = {TestStruct1(), TestStruct1()};
+        Array_ deduced1 = {1, 2, 3, 4, 5};
+        Array_ deduced2 = {1.1, 2.1, 3.1, 4, 5.8};
+        Array_ deduced3 = {1U, 2, 3, 4, 5};
+        Array_ deduced4 = {true, true, false};
+        Array_ deduced5 = {TestStruct1(), TestStruct1()};
 
         decltype(deduced1) assigned1;
         decltype(deduced2) assigned2;
@@ -182,14 +182,14 @@ namespace jot::tests
         runtime_assert(assigned5 == deduced5);
 
         assigned1 = {1, 3, 4, 5, 6};
-        runtime_assert(assigned1 == Array{1, 3, 4, 5, 6});
+        runtime_assert(assigned1 == Array_{1, 3, 4, 5, 6});
     }
 
     proc test_acessors()
     {
-        constexpr Array deduced1 = {1, 2, 3, 4, 5};
-        constexpr Array deduced3 = {1U, 2, 3, 4, 5};
-        constexpr Array deduced5 = {TestStruct1(), TestStruct1()};
+        constexpr Array_ deduced1 = {1, 2, 3, 4, 5};
+        constexpr Array_ deduced3 = {1U, 2, 3, 4, 5};
+        constexpr Array_ deduced5 = {TestStruct1(), TestStruct1()};
 
         hybrid_assert(std::begin(deduced1) == deduced1.data);
         hybrid_assert(std::end(deduced1) == deduced1 + deduced1.size);

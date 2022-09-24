@@ -162,7 +162,7 @@ namespace jot::tests
                 0x11, 0x22, 0x33, 0x44,
                 0x66, 0x77, 0x88, 0x99});
 
-            using ValsArr = Array<u32, 3>;
+            using ValsArr = Array_<u32, 3>;
             static_assert(sizeof(ValsArr) == sizeof(byte_vals));
             constexpr ValsArr vals = bitcast<ValsArr>(byte_vals);
             
@@ -193,7 +193,7 @@ namespace jot::tests
                 0x66, 0x77, 0x88, 0x99,
                 0xAA, 0xBB, 0xCC, 0xDD});
 
-            using ValsArr = Array<u64, 2>;
+            using ValsArr = Array_<u64, 2>;
             static_assert(sizeof(ValsArr) == sizeof(byte_vals));
             constexpr ValsArr vals = bitcast<ValsArr>(byte_vals);
 
@@ -222,9 +222,9 @@ namespace jot::tests
     func get_bitfield_tester(Ret val, let from_bit, let bit_count, let expected)
     {
         let rep1 = to_bytes(val);
-        Array<u16, 8> rep2 = {0};
-        Array<u32, 4> rep3 = {0};
-        Array<u64, 2> rep4 = {0};
+        Array_<u16, 8> rep2 = {0};
+        Array_<u32, 4> rep3 = {0};
+        Array_<u64, 2> rep4 = {0};
         copy_bytes(rep2.data, rep1.data, rep1.size);
         copy_bytes(rep3.data, rep1.data, rep1.size);
         copy_bytes(rep4.data, rep1.data, rep1.size);
@@ -349,9 +349,9 @@ namespace jot::tests
     func set_bitfield_tester(T val, let from_bit, let bit_count, let value, let expected)
     {
         mut rep1 = to_bytes(val);
-        Array<u16, 8> rep2 = {0};
-        Array<u32, 4> rep3 = {0};
-        Array<u64, 2> rep4 = {0};
+        Array_<u16, 8> rep2 = {0};
+        Array_<u32, 4> rep3 = {0};
+        Array_<u64, 2> rep4 = {0};
         copy_bytes(rep2.data, rep1.data, rep1.size);
         copy_bytes(rep3.data, rep1.data, rep1.size);
         copy_bytes(rep4.data, rep1.data, rep1.size);
@@ -532,7 +532,7 @@ namespace jot::tests
         runtime_assert(BS1::get<4, u32>(cont) == 0); 
 
 
-        //Array acessors
+        //Array_ acessors
         runtime_assert(BS1::array::get<0>(conts) == false); 
         runtime_assert(BS1::array::get<1>(conts) == 0); 
         runtime_assert(BS1::array::get<2>(conts) == 0); 
