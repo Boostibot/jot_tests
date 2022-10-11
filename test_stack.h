@@ -983,7 +983,7 @@ namespace jot::stack_test
 
         {
             Stack stack;
-            splice(&stack, 0, 0, vals);
+            splice(&stack, 0, 0, move(vals));
 
             runtime_assert(stack.size == 3);
             runtime_assert(stack[0] == vals[0]);
@@ -991,13 +991,13 @@ namespace jot::stack_test
             runtime_assert(stack[2] == vals[2]);
 
             Slice_<T> empty;
-            splice(&stack, 3, 0, empty);
+            splice(&stack, 3, 0, move(empty));
             runtime_assert(stack.size == 3);
             runtime_assert(stack[0] == vals[0]);
             runtime_assert(stack[1] == vals[1]);
             runtime_assert(stack[2] == vals[2]);
 
-            splice(&stack, 3, 0, vals);
+            splice(&stack, 3, 0, move(vals));
             runtime_assert(stack.size == 6);
             runtime_assert(stack[0] == vals[0]);
             runtime_assert(stack[1] == vals[1]);
@@ -1006,14 +1006,14 @@ namespace jot::stack_test
             runtime_assert(stack[4] == vals[1]);
             runtime_assert(stack[5] == vals[2]);
 
-            splice(&stack, 3, 2, empty);
+            splice(&stack, 3, 2, move(empty));
             runtime_assert(stack.size == 4);
             runtime_assert(stack[0] == vals[0]);
             runtime_assert(stack[1] == vals[1]);
             runtime_assert(stack[2] == vals[2]);
             runtime_assert(stack[3] == vals[2]);
 
-            splice(&stack, 2, 2, vals);
+            splice(&stack, 2, 2, move(vals));
             runtime_assert(stack.size == 5);
             runtime_assert(stack[0] == vals[0]);
             runtime_assert(stack[1] == vals[1]);
@@ -1024,7 +1024,7 @@ namespace jot::stack_test
             splice(&stack, 2, 3);
             runtime_assert(stack.size == 2);
 
-            splice(&stack, 0, 2, expaned);
+            splice(&stack, 0, 2, move(expaned));
             runtime_assert(stack.size == 7);
             runtime_assert(stack[4] == vals[0]);
             runtime_assert(stack[5] == vals[1]);
@@ -1041,14 +1041,14 @@ namespace jot::stack_test
             runtime_assert(stack[1] == vals[1]);
             runtime_assert(stack[2] == vals[2]);
             
-            splice(&stack, 1, 0, single);
+            splice(&stack, 1, 0, move(single));
             runtime_assert(stack.size == 4);
             runtime_assert(stack[0] == vals[0]);
             runtime_assert(stack[1] == vals[0]);
             runtime_assert(stack[2] == vals[1]);
             runtime_assert(stack[3] == vals[2]);
             
-            splice(&stack, 3, 0, vals);
+            splice(&stack, 3, 0, move(vals));
             runtime_assert(stack.size == 7);
             runtime_assert(stack[0] == vals[0]);
             runtime_assert(stack[1] == vals[0]);
@@ -1092,7 +1092,7 @@ namespace jot::stack_test
         constexpr auto test_constexpr = []{
             test_splice<0, i32>({10, 20, 30});
             test_splice<0, f64>({1.0, 2.0, 3.0});
-            test_splice<0, Not_Copyable>(arr3);
+            test_splice<0, Not_Copyable>(std::move(arr3));
 
             return true;
         }();
