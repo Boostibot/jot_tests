@@ -86,17 +86,17 @@ namespace jot::tests
             auto el2 = std::get<1>(arr);
             auto el3 = std::get<2>(arr);
             auto [a, b, c] = arr;
-            static_assert(are_same_v<decltype(a), decltype(b), decltype(c), int>);
+            static_assert(same<decltype(a), decltype(b), decltype(c), int>);
         }
         {
             constexpr Array_ arr = {1};
             auto [a] = arr;
-            static_assert(are_same_v<decltype(a), int>);
+            static_assert(same<decltype(a), int>);
         }
         {
             constexpr Array_ arr = {1.5, 1, 3, 7};
             auto [a, b, c, d] = arr;
-            static_assert(are_same_v<decltype(a), decltype(b), decltype(c), decltype(d), double>);
+            static_assert(same<decltype(a), decltype(b), decltype(c), decltype(d), double>);
         }
     }
 

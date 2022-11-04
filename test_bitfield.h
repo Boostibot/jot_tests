@@ -146,14 +146,14 @@ namespace jot::tests
         {
             constexpr byte vals[] = {0xAA, 0xBB, 0xCC, 0xDD};
 
-            hybrid_assert(get_array_bytefield<u32>(vals, 0, 0) == 0);
-            hybrid_assert(get_array_bytefield<u32>(vals, 0, 1) == 0xAA);
-            hybrid_assert(get_array_bytefield<u32>(vals, 1, 1) == 0xBB);
-            hybrid_assert(get_array_bytefield<u32>(vals, 2, 1) == 0xCC);
-            hybrid_assert(get_array_bytefield<u32>(vals, 3, 1) == 0xDD);
-            hybrid_assert(get_array_bytefield<u32>(vals, 2, 2) == from_bytes<u16>(Bytes<u16>{0xCC, 0xDD}));
-            hybrid_assert(get_array_bytefield<u32>(vals, 1, 2) == from_bytes<u16>(Bytes<u16>{0xBB, 0xCC}));
-            hybrid_assert(get_array_bytefield<u32>(vals, 0, 4) == from_bytes<u32>(Bytes<u32>{0xAA, 0xBB, 0xCC, 0xDD}));
+            hybrid_assert(get_bytefield_in_array<u32>(vals, 0, 0) == 0);
+            hybrid_assert(get_bytefield_in_array<u32>(vals, 0, 1) == 0xAA);
+            hybrid_assert(get_bytefield_in_array<u32>(vals, 1, 1) == 0xBB);
+            hybrid_assert(get_bytefield_in_array<u32>(vals, 2, 1) == 0xCC);
+            hybrid_assert(get_bytefield_in_array<u32>(vals, 3, 1) == 0xDD);
+            hybrid_assert(get_bytefield_in_array<u32>(vals, 2, 2) == from_bytes<u16>(Bytes<u16>{0xCC, 0xDD}));
+            hybrid_assert(get_bytefield_in_array<u32>(vals, 1, 2) == from_bytes<u16>(Bytes<u16>{0xBB, 0xCC}));
+            hybrid_assert(get_bytefield_in_array<u32>(vals, 0, 4) == from_bytes<u32>(Bytes<u32>{0xAA, 0xBB, 0xCC, 0xDD}));
         }
 
         {
@@ -168,22 +168,22 @@ namespace jot::tests
             
             constexpr let conv = [](u64 val){ return to_endian(val, Endian::Little); };
 
-            hybrid_assert(get_array_bytefield<u32>(vals.data, 9, 0) == 0);
-            hybrid_assert(get_array_bytefield<u32>(vals.data, 5, 0) == 0);
-            hybrid_assert(get_array_bytefield<u32>(vals.data, 0, 1) == 0xAA);
-            hybrid_assert(get_array_bytefield<u32>(vals.data, 1, 1) == 0xBB);
+            hybrid_assert(get_bytefield_in_array<u32>(vals.data, 9, 0) == 0);
+            hybrid_assert(get_bytefield_in_array<u32>(vals.data, 5, 0) == 0);
+            hybrid_assert(get_bytefield_in_array<u32>(vals.data, 0, 1) == 0xAA);
+            hybrid_assert(get_bytefield_in_array<u32>(vals.data, 1, 1) == 0xBB);
 
-            hybrid_assert(get_array_bytefield<u32>(vals.data, 2, 2) == conv(0xDDCC));
-            hybrid_assert(get_array_bytefield<u32>(vals.data, 1, 2) == conv(0xCCBB));
-            hybrid_assert(get_array_bytefield<u32>(vals.data, 0, 4) == conv(0xDDCCBBAA));
+            hybrid_assert(get_bytefield_in_array<u32>(vals.data, 2, 2) == conv(0xDDCC));
+            hybrid_assert(get_bytefield_in_array<u32>(vals.data, 1, 2) == conv(0xCCBB));
+            hybrid_assert(get_bytefield_in_array<u32>(vals.data, 0, 4) == conv(0xDDCCBBAA));
 
-            hybrid_assert(get_array_bytefield<u32>(vals.data, 5, 2) == conv(0x3322));
-            hybrid_assert(get_array_bytefield<u32>(vals.data, 0, 3) == conv(0xCCBBAA));
-            hybrid_assert(get_array_bytefield<u32>(vals.data, 8, 4) == conv(0x99887766));
+            hybrid_assert(get_bytefield_in_array<u32>(vals.data, 5, 2) == conv(0x3322));
+            hybrid_assert(get_bytefield_in_array<u32>(vals.data, 0, 3) == conv(0xCCBBAA));
+            hybrid_assert(get_bytefield_in_array<u32>(vals.data, 8, 4) == conv(0x99887766));
 
-            hybrid_assert(get_array_bytefield<u32>(vals.data, 5, 3) == conv(0x443322));
-            hybrid_assert(get_array_bytefield<u64>(vals.data, 3, 5) == conv(0x44332211'DD));
-            hybrid_assert(get_array_bytefield<u64>(vals.data, 3, 7) == conv(0x7766'44332211'DD));
+            hybrid_assert(get_bytefield_in_array<u32>(vals.data, 5, 3) == conv(0x443322));
+            hybrid_assert(get_bytefield_in_array<u64>(vals.data, 3, 5) == conv(0x44332211'DD));
+            hybrid_assert(get_bytefield_in_array<u64>(vals.data, 3, 7) == conv(0x7766'44332211'DD));
         }
 
         {
@@ -199,22 +199,22 @@ namespace jot::tests
 
             constexpr let conv = [](u64 val){ return to_endian(val, Endian::Little); };
 
-            hybrid_assert(get_array_bytefield<u32>(vals.data, 9, 0) == 0);
-            hybrid_assert(get_array_bytefield<u32>(vals.data, 5, 0) == 0);
-            hybrid_assert(get_array_bytefield<u32>(vals.data, 0, 1) == 0xAA);
-            hybrid_assert(get_array_bytefield<u32>(vals.data, 1, 1) == 0xBB);
+            hybrid_assert(get_bytefield_in_array<u32>(vals.data, 9, 0) == 0);
+            hybrid_assert(get_bytefield_in_array<u32>(vals.data, 5, 0) == 0);
+            hybrid_assert(get_bytefield_in_array<u32>(vals.data, 0, 1) == 0xAA);
+            hybrid_assert(get_bytefield_in_array<u32>(vals.data, 1, 1) == 0xBB);
 
-            hybrid_assert(get_array_bytefield<u32>(vals.data, 2, 2) == conv(0xDDCC));
-            hybrid_assert(get_array_bytefield<u32>(vals.data, 1, 2) == conv(0xCCBB));
-            hybrid_assert(get_array_bytefield<u32>(vals.data, 0, 4) == conv(0xDDCCBBAA));
+            hybrid_assert(get_bytefield_in_array<u32>(vals.data, 2, 2) == conv(0xDDCC));
+            hybrid_assert(get_bytefield_in_array<u32>(vals.data, 1, 2) == conv(0xCCBB));
+            hybrid_assert(get_bytefield_in_array<u32>(vals.data, 0, 4) == conv(0xDDCCBBAA));
 
-            hybrid_assert(get_array_bytefield<u32>(vals.data, 5, 2) == conv(0x3322));
-            hybrid_assert(get_array_bytefield<u32>(vals.data, 0, 3) == conv(0xCCBBAA));
-            hybrid_assert(get_array_bytefield<u32>(vals.data, 8, 4) == conv(0x99887766));
+            hybrid_assert(get_bytefield_in_array<u32>(vals.data, 5, 2) == conv(0x3322));
+            hybrid_assert(get_bytefield_in_array<u32>(vals.data, 0, 3) == conv(0xCCBBAA));
+            hybrid_assert(get_bytefield_in_array<u32>(vals.data, 8, 4) == conv(0x99887766));
 
-            hybrid_assert(get_array_bytefield<u32>(vals.data, 5, 3) == conv(0x443322));
-            hybrid_assert(get_array_bytefield<u64>(vals.data, 3, 5) == conv(0x44332211'DD));
-            hybrid_assert(get_array_bytefield<u64>(vals.data, 3, 7) == conv(0x7766'44332211'DD));
+            hybrid_assert(get_bytefield_in_array<u32>(vals.data, 5, 3) == conv(0x443322));
+            hybrid_assert(get_bytefield_in_array<u64>(vals.data, 3, 5) == conv(0x44332211'DD));
+            hybrid_assert(get_bytefield_in_array<u64>(vals.data, 3, 7) == conv(0x7766'44332211'DD));
         }
     }
 
@@ -230,10 +230,10 @@ namespace jot::tests
         copy_bytes(rep4.data, rep1.data, rep1.size);
 
         return (get_bitfield<Ret, Ret>(val, from_bit, bit_count) == expected)
-            && (get_array_bitfield<Ret>(rep1.data, from_bit, bit_count) == expected)
-            && (get_array_bitfield<Ret>(rep2.data, from_bit, bit_count) == expected)
-            && (get_array_bitfield<Ret>(rep3.data, from_bit, bit_count) == expected)
-            && (get_array_bitfield<Ret>(rep4.data, from_bit, bit_count) == expected);
+            && (get_bitfield_in_array<Ret>(rep1.data, from_bit, bit_count) == expected)
+            && (get_bitfield_in_array<Ret>(rep2.data, from_bit, bit_count) == expected)
+            && (get_bitfield_in_array<Ret>(rep3.data, from_bit, bit_count) == expected)
+            && (get_bitfield_in_array<Ret>(rep4.data, from_bit, bit_count) == expected);
     }
 
     //get_bitfield should return an unsigned value represented by the bit span in the fields array
@@ -356,10 +356,10 @@ namespace jot::tests
         copy_bytes(rep3.data, rep1.data, rep1.size);
         copy_bytes(rep4.data, rep1.data, rep1.size);
 
-        set_array_bitfield(rep1.data, from_bit, bit_count, value);
-        set_array_bitfield(rep2.data, from_bit, bit_count, value);
-        set_array_bitfield(rep3.data, from_bit, bit_count, value);
-        set_array_bitfield(rep4.data, from_bit, bit_count, value);
+        set_bitfield_in_array(rep1.data, from_bit, bit_count, value);
+        set_bitfield_in_array(rep2.data, from_bit, bit_count, value);
+        set_bitfield_in_array(rep3.data, from_bit, bit_count, value);
+        set_bitfield_in_array(rep4.data, from_bit, bit_count, value);
 
         return (set_bitfield(val, from_bit, bit_count, value) == expected)
             && (extract_bytes<T>(rep1) == expected) 
@@ -484,11 +484,11 @@ namespace jot::tests
             Bitfield<u16, 3>, 
             Bitfield<u32, 32>>;
 
-        static_assert(are_same_v<BS1::FieldType<0>, bool>);
-        static_assert(are_same_v<BS1::FieldType<1>, u16>);
-        static_assert(are_same_v<BS1::FieldType<2>, u64>);
-        static_assert(are_same_v<BS1::FieldType<3>, u16>);
-        static_assert(are_same_v<BS1::FieldType<4>, u32>);
+        static_assert(same<BS1::FieldType<0>, bool>);
+        static_assert(same<BS1::FieldType<1>, u16>);
+        static_assert(same<BS1::FieldType<2>, u64>);
+        static_assert(same<BS1::FieldType<3>, u16>);
+        static_assert(same<BS1::FieldType<4>, u32>);
 
         constexpr size_t cont_count = div_round_up(BS1::bit_count, BIT_COUNT<Container>);
         Container conts[cont_count] = {0};

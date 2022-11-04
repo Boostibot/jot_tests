@@ -114,13 +114,13 @@ namespace jot::stack_test
 
             runtime_assert(*push(&stack, vals[0]) == vals[0]);
 
-            runtime_assert(stack.data == stack.static_data());
+            runtime_assert(stack.data == static_data(stack));
             runtime_assert(stack.size == 1);
             runtime_assert(stack.capacity == stack.static_capacity);
 
             runtime_assert(*push(&stack, vals[1]) == vals[1]);
 
-            runtime_assert(stack.data == stack.static_data());
+            runtime_assert(stack.data == static_data(stack));
             runtime_assert(stack.size == 2);
             runtime_assert(stack.capacity == 2);
 
@@ -165,7 +165,7 @@ namespace jot::stack_test
 
             runtime_assert(*push(&stack, vals[1]) == vals[1]);
 
-            runtime_assert(stack.data == stack.static_data());
+            runtime_assert(stack.data == static_data(stack));
             runtime_assert(stack.size == 2);
             runtime_assert(stack.capacity == 2);
 
